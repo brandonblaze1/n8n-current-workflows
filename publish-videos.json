@@ -1,0 +1,1352 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.platformTag }}",
+                    "rightValue": "fb-prt",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "55c9a197-7a20-489a-896f-af8fc490bb55"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "685e7abc-e004-45fb-8836-f371b57bcabc",
+                    "leftValue": "={{ $json.platformTag }}",
+                    "rightValue": "tiktok",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "185c7c9b-59d4-4fab-848a-175e34ee92cd",
+                    "leftValue": "={{ $json.platformTag }}",
+                    "rightValue": "fb-reel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "47ba58a7-ac3f-44ae-9316-18a65854d4dc",
+                    "leftValue": "={{ $json.platformTag }}",
+                    "rightValue": "yt-short",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d9bf4990-15d6-4817-b6a5-00647605a452",
+                    "leftValue": "={{ $json.platformTag }}",
+                    "rightValue": "yt",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1232,
+        -112
+      ],
+      "id": "876f198f-2789-462d-bbce-287a310e4913",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "useBinaryData": true
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        -256
+      ],
+      "id": "429a1129-e3d5-4e83-894d-4a4c51d459fa",
+      "name": "Fb Portrait Upload",
+      "credentials": {
+        "blotatoApi": {
+          "id": "SSv66KKHzlmvDxUP",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        160
+      ],
+      "id": "1d893796-711c-4a26-a054-8af746790468",
+      "name": "OpenAI Chat Model4",
+      "credentials": {
+        "openAiApi": {
+          "id": "Navm9hDUnjwpRcbB",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "*",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1SHD_9yp8z-yfJFqXH8hqggI0mguvfNz4",
+            "mode": "list",
+            "cachedResultName": "social-media-videos",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1SHD_9yp8z-yfJFqXH8hqggI0mguvfNz4"
+          },
+          "includeTrashed": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        560,
+        -64
+      ],
+      "id": "05080eae-5885-4ed1-a037-01db0b2d37e2",
+      "name": "SearchDrive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "cer2DAVMEta9v7Fb",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input: all files in social-media-videos (only care about .mp4 now)\n// Goal: emit one item per video with slug + platformTag + video IDs\n// All listing info now comes from NocoDB, not from a .txt file.\n\n// Known video suffixes (for platform tags)\nconst suffixes = [\n  { tag: \"tiktok\",   suffix: \"-tiktok\" },\n  { tag: \"fb-reel\",  suffix: \"-fb-reel\" },\n  { tag: \"fb-prt\",   suffix: \"-fb-prt\" },\n  { tag: \"yt-short\", suffix: \"-yt-short\" },\n  { tag: \"yt\",       suffix: \"-yt\" },\n];\n\nconst items = $input.all();  // all Drive file items\nconst output = [];\n\nfor (const item of items) {\n  const json = item.json || {};\n  const name = json.name || \"\";\n  const id = json.id;\n\n  if (!name || !id) continue;\n\n  // Only process MP4 files\n  if (!name.toLowerCase().endsWith(\".mp4\")) {\n    continue;\n  }\n\n  const noExt = name.replace(/\\.[^.]+$/, \"\"); // strip extension\n  let platformTag = \"unknown\";\n  let slug = noExt;\n\n  // Detect platformTag from filename suffix\n  for (const { tag, suffix } of suffixes) {\n    if (noExt.endsWith(suffix)) {\n      platformTag = tag;\n      slug = noExt.slice(0, -suffix.length); // remove suffix (-yt-short etc.)\n      break;\n    }\n  }\n\n  // If you want to skip unknowns entirely, uncomment the next two lines:\n  // if (platformTag === \"unknown\") continue;\n\n  output.push({\n    json: {\n      slug,\n      platformTag,\n      videoFileId: id,\n      videoFileName: name,\n      // No txtFileId / txtFileName anymore – metadata now lives in NocoDB\n    },\n  });\n}\n\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        -64
+      ],
+      "id": "fa09cffb-3547-4d19-a34a-1ebd08a04d22",
+      "name": "Parse File Names"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.videoFileId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1008,
+        -64
+      ],
+      "id": "b0207320-9876-46d1-82f6-da500e7daa22",
+      "name": "Drive Download Videos",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "cer2DAVMEta9v7Fb",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You generate social media copy for Blaze Real Estate in Amarillo, Texas.\n\nYou MUST return ONLY valid JSON with this exact structure:\n\n{\n  \"tiktok\": {\n    \"title\": \"\",\n    \"caption\": \"\"\n  },\n  \"fbReel\": {\n    \"headline\": \"\",\n    \"caption\": \"\"\n  },\n  \"fbPost\": {\n    \"headline\": \"\",\n    \"body\": \"\"\n  },\n  \"ytShort\": {\n    \"title\": \"\",\n    \"description\": \"\"\n  },\n  \"ytFull\": {\n    \"title\": \"\",\n    \"description\": \"\",\n    \"cta\": \"\"\n  }\n}\n\nGENERAL RULES:\n- Blaze Voice: direct, confident, slightly witty, zero fluff.\n- No real-estate clichés (“must-see,” “dream home,” “beautiful home,” etc.).\n- Do NOT include the full street address unless it appears in the input.\n- All platform outputs must be DIFFERENT from each other (no copy/paste phrasing).\n- No hashtags unless explicitly requested (and they are NOT requested here).\n- No emojis EXCEPT TikTok (TikTok may use 1–3 tasteful emojis if they add punch).\n\nPROPERTY DATA:\nProperty Name: {{ $json.Property }}\nProperty Address: {{ $json.Address }}\nBedrooms: {{ $json.Bedrooms }}\nBaths: {{ $json.Bathrooms }}\nSqft: {{ $json.Sqft }}\nRent: {{ $json.Rent }}\nOriginal Description:\n{{ $json['Marketing Description'] }}\nPLATFORM RULES:\n\n1) TikTok  (tiktok.title, tiktok.caption)\n- Style: fast hook, thumb-stopping, can be a bit edgy but still professional.\n- Emojis allowed (up to 3).\n- Title: max ~55 characters, strong hook around value, layout, or vibe.\n- Caption: 1–2 short lines. Can expand slightly on the hook, but stay tight.\n\n2) Facebook Reel  (fbReel.headline, fbReel.caption)\n- No emojis.\n- Headline: short, punchy, scroll-stopping; max ~55 characters.\n- Caption: 1–3 sentences giving quick context (who this is for, what makes it stand out).\n\n3) Facebook Post (Feed)  (fbPost.headline, fbPost.body)\n- No emojis.\n- Headline: more like a text headline than clickbait; max ~75 characters.\n- Body: 2–4 sentences. Clear, informational, Blaze Voice. Summarize key features (beds, baths, sqft, rent, and one or two standout details).\n\n4) YouTube Short  (ytShort.title, ytShort.description)\n- No emojis.\n- Title: highly clickable, max ~55 characters, different from long-form YouTube title.\n- Description: 1–2 sentences describing what the viewer is seeing; keep it simple and factual.\n\n5) YouTube Full Video  (ytFull.title, ytFull.description, ytFull.cta)\n- No emojis.\n- Title: highly clickable, max ~75 characters, different from the Shorts title; focus on layout, rent value, or strong feature.\n- Description: 3–5 short paragraphs (1–2 sentences each). Cover interior, exterior/neighborhood, and rental basics (beds/baths/sqft/rent) in Blaze Voice.\n- CTA: MUST be exactly:\n\n\"Learn more or apply:\nhttps://www.blazeproperty.com/\"\n\nOUTPUT:\n- Return ONLY a single JSON object in the exact schema shown above.\n- Use double quotes for all keys and string values.\n- No trailing commas.\n- Do NOT include any explanation, commentary, or markdown – JSON ONLY.\n",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -16,
+        -64
+      ],
+      "id": "b23031c6-3eda-4a2f-ad6a-5d578ee90641",
+      "name": "AI Generate Post Text"
+    },
+    {
+      "parameters": {
+        "formTitle": "Social Media Post",
+        "formDescription": "Generate social media posts for rental listings",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Property Name"
+            },
+            {
+              "fieldLabel": "Property Address"
+            },
+            {
+              "fieldLabel": "Rent",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Bedrooms",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Bathrooms",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Sqft",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Marketing Title"
+            },
+            {
+              "fieldLabel": "Marketing Description",
+              "fieldType": "textarea"
+            },
+            {
+              "fieldLabel": "Rentable UID"
+            },
+            {
+              "fieldLabel": "slug"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -464,
+        -64
+      ],
+      "id": "3109bbbe-d1fb-4f02-9fb1-4c424861c1f9",
+      "name": "On form submission",
+      "webhookId": "a4dd2377-a5ea-47bd-83cf-092d0da65a45"
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "create",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "=Property",
+              "fieldValue": "={{ $json['Property Name'] }}"
+            },
+            {
+              "fieldName": "Address",
+              "fieldValue": "={{ $json['Property Address'] }}"
+            },
+            {
+              "fieldName": "Rent",
+              "fieldValue": "={{ $json.Rent }}"
+            },
+            {
+              "fieldName": "Bedrooms",
+              "fieldValue": "={{ $json.Bedrooms }}"
+            },
+            {
+              "fieldName": "Bathrooms",
+              "fieldValue": "={{ $json.Bathrooms }}"
+            },
+            {
+              "fieldName": "Sqft",
+              "fieldValue": "={{ $json.Sqft }}"
+            },
+            {
+              "fieldName": "Marketing Title",
+              "fieldValue": "={{ $json['Marketing Title'] }}"
+            },
+            {
+              "fieldName": "Marketing Description",
+              "fieldValue": "={{ $json['Marketing Description'] }}"
+            },
+            {
+              "fieldName": "Rentable UID",
+              "fieldValue": "={{ $json['Rentable UID'] }}"
+            },
+            {
+              "fieldName": "slug",
+              "fieldValue": "={{ $json.slug }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        -240,
+        -64
+      ],
+      "id": "502b8309-6ae2-4ee9-b93f-5beca574ecd5",
+      "name": "Create Initial Row",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"tiktok\": { \"title\": \"\", \"caption\": \"\" },\n  \"fbReel\": { \"headline\": \"\", \"caption\": \"\" },\n  \"fbPost\": { \"headline\": \"\", \"body\": \"\" },\n  \"ytShort\": { \"title\": \"\", \"description\": \"\" },\n  \"ytFull\": { \"title\": \"\", \"description\": \"\", \"cta\": \"\" }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        160
+      ],
+      "id": "33a1c706-c009-4a50-afee-f619d4bc18c4",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "id",
+              "fieldValue": "={{ $('Create Initial Row').item.json.Id }}"
+            },
+            {
+              "fieldName": "Tiktok Title",
+              "fieldValue": "={{ $json.output.tiktok.title }}"
+            },
+            {
+              "fieldName": "Tiktok Caption",
+              "fieldValue": "={{ $json.output.tiktok.caption }}"
+            },
+            {
+              "fieldName": "FB-Reel Headline",
+              "fieldValue": "={{ $json.output.fbReel.headline }}"
+            },
+            {
+              "fieldName": "FB-Reel Caption",
+              "fieldValue": "={{ $json.output.fbReel.caption }}"
+            },
+            {
+              "fieldName": "FB Post Headline",
+              "fieldValue": "={{ $json.output.fbPost.headline }}"
+            },
+            {
+              "fieldName": "FB Post Body",
+              "fieldValue": "={{ $json.output.fbPost.body }}"
+            },
+            {
+              "fieldName": "YT Short Title",
+              "fieldValue": "={{ $json.output.ytShort.title }}"
+            },
+            {
+              "fieldName": "YT-Short Description",
+              "fieldValue": "={{ $json.output.ytShort.description }}"
+            },
+            {
+              "fieldName": "YT-Full Title",
+              "fieldValue": "={{ $json.output.ytFull.title }}"
+            },
+            {
+              "fieldName": "YT-Full Description",
+              "fieldValue": "={{ $json.output.ytFull.description }}"
+            },
+            {
+              "fieldName": "YT-Full CTA",
+              "fieldValue": "={{ $json.output.ytFull.cta }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        336,
+        -64
+      ],
+      "id": "fc89e43c-139b-4200-aa46-06bbd0904641",
+      "name": "Update a row",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "platform": "facebook",
+        "accountId": {
+          "__rl": true,
+          "value": "13967",
+          "mode": "list",
+          "cachedResultName": "Brandon Stewart",
+          "cachedResultUrl": "https://backend.blotato.com/v2/accounts/13967"
+        },
+        "postContentText": "={{ $json['FB Post Headline'] }}\n{{ $json['FB-Reel Caption'] }}\nSee and Apply at https://blazeproperty.com/property-launch/?lid={{ $json['Rentable UID'] }}",
+        "postContentMediaUrls": "={{ $json['FB-Reel'] }}",
+        "facebookPageId": {
+          "__rl": true,
+          "value": "329129493627618",
+          "mode": "list",
+          "cachedResultName": "Blaze Real Estate TX",
+          "cachedResultUrl": "https://backend.blotato.com/v2/accounts/13967/subaccounts/329129493627618"
+        },
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        2128,
+        -256
+      ],
+      "id": "5ee58387-4422-4d06-bd21-dc98488aba74",
+      "name": "Create post2",
+      "credentials": {
+        "blotatoApi": {
+          "id": "SSv66KKHzlmvDxUP",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Id",
+              "fieldValue": "={{ $('Get FB Reel Post Fields').item.json.Id }}"
+            },
+            {
+              "fieldName": "Reel-Post ID",
+              "fieldValue": "={{ $json.postSubmissionId }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        2352,
+        -256
+      ],
+      "id": "0083c5d5-25ef-4fb5-8374-147503e19b8d",
+      "name": "Update a row2",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "platform": "youtube",
+        "accountId": {
+          "__rl": true,
+          "value": "20834",
+          "mode": "list",
+          "cachedResultName": "Brandon Stewart (Blaze Real Estate)",
+          "cachedResultUrl": "https://backend.blotato.com/v2/accounts/20834"
+        },
+        "postContentText": "={{ $json['YT-Short description'] }}\nSee and Apply at https://blazeproperty.com/property-launch/?lid={{ $json['Rentable UID'] }}",
+        "postContentMediaUrls": "={{ $json['YT-Short Vid'] }}",
+        "postCreateYoutubeOptionTitle": "={{ $json['YT Short Title'] }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        160
+      ],
+      "id": "f316f0a9-402c-456c-9038-c91606da7e74",
+      "name": "Create post",
+      "credentials": {
+        "blotatoApi": {
+          "id": "SSv66KKHzlmvDxUP",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Id",
+              "fieldValue": "={{ $('Get YT Short Fields').item.json.Id }}"
+            },
+            {
+              "fieldName": "YT-Short ID",
+              "fieldValue": "={{ $json.postSubmissionId }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        2384,
+        160
+      ],
+      "id": "9119a3fe-8cd5-499d-8c8e-17c73c8d832f",
+      "name": "Update a row4",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "platform": "youtube",
+        "accountId": {
+          "__rl": true,
+          "value": "20834",
+          "mode": "list",
+          "cachedResultName": "Brandon Stewart (Blaze Real Estate)",
+          "cachedResultUrl": "https://backend.blotato.com/v2/accounts/20834"
+        },
+        "postContentText": "={{ $json['YT-Full Description'] }}\n\nSee and Apply at https://blazeproperty.com/property-launch/?lid={{ $json['Rentable UID'] }}",
+        "postContentMediaUrls": "={{ $json['YT-Full Vid'] }}",
+        "postCreateYoutubeOptionTitle": "={{ $json['YT-Full Title'] }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        352
+      ],
+      "id": "3bed2b06-4767-4e2f-9392-85863c6b443b",
+      "name": "Create post3",
+      "credentials": {
+        "blotatoApi": {
+          "id": "SSv66KKHzlmvDxUP",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Id",
+              "fieldValue": "={{ $('Get YT Full Fields').item.json.Id }}"
+            },
+            {
+              "fieldName": "YT-Full Post ID",
+              "fieldValue": "={{ $json.postSubmissionId }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        2384,
+        352
+      ],
+      "id": "f437bd55-e540-44ea-b346-bb1a6b55e694",
+      "name": "Update a row6",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "useBinaryData": true
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        160
+      ],
+      "id": "55ffd788-1ba9-486a-9204-bc15ae5258bf",
+      "name": "YT Short Upload",
+      "credentials": {
+        "blotatoApi": {
+          "id": "SSv66KKHzlmvDxUP",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "useBinaryData": true
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        352
+      ],
+      "id": "3546c33a-5e12-4be2-af8b-d658b3e83cc9",
+      "name": "YT Full Upload",
+      "credentials": {
+        "blotatoApi": {
+          "id": "SSv66KKHzlmvDxUP",
+          "name": "Blotato account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Id",
+              "fieldValue": "={{ $('Create Initial Row').first().json.Id }}"
+            },
+            {
+              "fieldName": "FB-Reel",
+              "fieldValue": "={{ $json.url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1680,
+        -256
+      ],
+      "id": "2a6aade1-5f51-4e43-8d76-e1899b252a58",
+      "name": "Update Facebook Reel URL",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Id",
+              "fieldValue": "={{ $('Create Initial Row').first().json.Id }}"
+            },
+            {
+              "fieldName": "YT-Short Vid",
+              "fieldValue": "={{ $json.url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1712,
+        160
+      ],
+      "id": "970a4385-89fa-43d0-8346-ab0a72736c7f",
+      "name": "Update YT Short Vid URL",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Id",
+              "fieldValue": "={{ $('Create Initial Row').first().json.Id }}"
+            },
+            {
+              "fieldName": "YT-Full Vid",
+              "fieldValue": "={{ $json.url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1712,
+        352
+      ],
+      "id": "61a2bd85-6145-4882-bc19-2f49cb10171d",
+      "name": "Update Youtube URL",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "id": "={{ $('Create Initial Row').first().json.Id }}"
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1904,
+        -256
+      ],
+      "id": "a894e306-535b-474d-bc36-9243806e3b34",
+      "name": "Get FB Reel Post Fields",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "id": "={{ $('Create Initial Row').first().json.Id }}"
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1936,
+        160
+      ],
+      "id": "7536ab13-a193-499a-9742-c86730c8554d",
+      "name": "Get YT Short Fields",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "id": "={{ $('Create Initial Row').first().json.Id }}"
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1936,
+        352
+      ],
+      "id": "1be731b2-825d-4440-8b8c-ba15516f4997",
+      "name": "Get YT Full Fields",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "useBinaryData": true
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        -64
+      ],
+      "id": "793e2c16-dc8c-49bf-8af5-0ed160d1a6ad",
+      "name": "Upload media",
+      "credentials": {
+        "blotatoApi": {
+          "id": "SSv66KKHzlmvDxUP",
+          "name": "Blotato account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "platform": "tiktok",
+        "accountId": {
+          "__rl": true,
+          "value": "13967",
+          "mode": "list"
+        },
+        "postContentText": "={{ $json['Tiktok Title'] }}\n{{ $json['Tiktok Caption'] }}\nSee and Apply at https://blazeproperty.com/property-launch/?lid={{ $json['Rentable UID'] }}",
+        "postContentMediaUrls": "={{ $json['FB-Reel'] }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        -64
+      ],
+      "id": "007cd3d2-de34-4726-b876-2202aee056a3",
+      "name": "Create post4",
+      "credentials": {
+        "blotatoApi": {
+          "id": "SSv66KKHzlmvDxUP",
+          "name": "Blotato account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Id",
+              "fieldValue": "={{ $('Get Tiktok Fields').item.json.Id }}"
+            },
+            {
+              "fieldName": "Reel-Post ID",
+              "fieldValue": "={{ $json.postSubmissionId }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        2368,
+        -64
+      ],
+      "id": "b2548373-e298-44d5-b1a2-1e1abf2b104d",
+      "name": "Update a row3",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "update",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Id",
+              "fieldValue": "={{ $('Create Initial Row').first().json.Id }}"
+            },
+            {
+              "fieldName": "TikTok Vid",
+              "fieldValue": "={{ $json.url }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1696,
+        -64
+      ],
+      "id": "0ec9f442-790a-465e-bf63-de613d702727",
+      "name": "Update Tiktok URL",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "projectId": "pkfyfrxbcmgpvf1",
+        "table": "mzasy96k935tuxb",
+        "id": "={{ $('Create Initial Row').first().json.Id }}"
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        1920,
+        -64
+      ],
+      "id": "5698b223-b2c2-4edb-931c-3bf7bbc23bda",
+      "name": "Get Tiktok Fields",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "Rh4stQtAYWkyCzG9",
+          "name": "NocoDB Token account"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Fb Portrait Upload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload media",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "YT Short Upload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "YT Full Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fb Portrait Upload": {
+      "main": [
+        [
+          {
+            "node": "Update Facebook Reel URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Generate Post Text",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchDrive": {
+      "main": [
+        [
+          {
+            "node": "Parse File Names",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse File Names": {
+      "main": [
+        [
+          {
+            "node": "Drive Download Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Drive Download Videos": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Generate Post Text": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Create Initial Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Initial Row": {
+      "main": [
+        [
+          {
+            "node": "AI Generate Post Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Generate Post Text",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "SearchDrive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create post2": {
+      "main": [
+        [
+          {
+            "node": "Update a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create post": {
+      "main": [
+        [
+          {
+            "node": "Update a row4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create post3": {
+      "main": [
+        [
+          {
+            "node": "Update a row6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YT Short Upload": {
+      "main": [
+        [
+          {
+            "node": "Update YT Short Vid URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YT Full Upload": {
+      "main": [
+        [
+          {
+            "node": "Update Youtube URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Facebook Reel URL": {
+      "main": [
+        [
+          {
+            "node": "Get FB Reel Post Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update YT Short Vid URL": {
+      "main": [
+        [
+          {
+            "node": "Get YT Short Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Youtube URL": {
+      "main": [
+        [
+          {
+            "node": "Get YT Full Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get FB Reel Post Fields": {
+      "main": [
+        [
+          {
+            "node": "Create post2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get YT Short Fields": {
+      "main": [
+        [
+          {
+            "node": "Create post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get YT Full Fields": {
+      "main": [
+        [
+          {
+            "node": "Create post3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload media": {
+      "main": [
+        [
+          {
+            "node": "Update Tiktok URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create post4": {
+      "main": [
+        [
+          {
+            "node": "Update a row3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Tiktok URL": {
+      "main": [
+        [
+          {
+            "node": "Get Tiktok Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Tiktok Fields": {
+      "main": [
+        [
+          {
+            "node": "Create post4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {
+    "On form submission": [
+      {
+        "Property Name": "1928 NW 18th Ave",
+        "Property Address": "1928 NW 18th Ave, Amarillo, TX 79107",
+        "Rent": 1200,
+        "Bedrooms": 3,
+        "Bathrooms": 1,
+        "Sqft": 866,
+        "Marketing Title": "Beautiful Inside",
+        "Marketing Description": "This house had an interior makeover. HIgh quality floor throughout, washer dryer hookups, stove and refrigerator included, accepts approved pets, access ramp to front door",
+        "Rentable UID": "b294d6c1-9140-4276-aad5-a6365306e92b",
+        "slug": "1928-18th",
+        "submittedAt": "2025-11-28T07:31:23.109-06:00",
+        "formMode": "test"
+      }
+    ]
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d0701a010edf8f0244fd1673e94cbe339c5fa5d818d429d8fc26d3fd939e5c3b"
+  }
+}
